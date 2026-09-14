@@ -16,14 +16,14 @@ $action = $_GET['action'] ?? 'products';
 // Logout
 if ($action === 'logout') {
     Auth::logout();
-    header('Location: /?action=login');
+    header('Location: ' . APP_BASE . '/?action=login');
     exit;
 }
 
 // Login POST
 if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     if (Auth::login(trim($_POST['username'] ?? ''), $_POST['password'] ?? '')) {
-        header('Location: /');
+        header('Location: ' . APP_BASE . '/');
         exit;
     }
     $loginError = 'Wrong username or password.';

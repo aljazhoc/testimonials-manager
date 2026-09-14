@@ -4,7 +4,7 @@ $db         = Database::get();
 $landingId  = (int) ($_GET['landing_id'] ?? 0);
 
 if (!$landingId) {
-    header('Location: /');
+    header('Location: ' . APP_BASE . '/');
     exit;
 }
 
@@ -14,7 +14,7 @@ $stmtL->execute([$landingId]);
 $landing = $stmtL->fetch();
 
 if (!$landing) {
-    header('Location: /');
+    header('Location: ' . APP_BASE . '/');
     exit;
 }
 
@@ -37,8 +37,8 @@ renderHeader('Testimonials — ' . $landing['country']);
 ?>
 
 <div class="breadcrumb">
-    <a href="/">Products</a> &rsaquo;
-    <a href="/?action=landings&sku=<?= urlencode($landing['parent_sku']) ?>"><?= h($landing['parent_sku']) ?></a>
+    <a href="<?= APP_BASE ?>/">Products</a> &rsaquo;
+    <a href="<?= APP_BASE ?>/?action=landings&sku=<?= urlencode($landing['parent_sku']) ?>"><?= h($landing['parent_sku']) ?></a>
     &rsaquo; <?= h(strtoupper($landing['country'])) ?>
 </div>
 

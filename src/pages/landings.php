@@ -39,7 +39,7 @@ renderHeader('Landings — ' . $sku);
 ?>
 
 <div class="breadcrumb">
-    <a href="/">Products</a> &rsaquo; <?= h($sku) ?>
+    <a href="<?= APP_BASE ?>/">Products</a> &rsaquo; <?= h($sku) ?>
 </div>
 
 <div class="page-header">
@@ -89,7 +89,7 @@ renderHeader('Landings — ' . $sku);
                 <span class="badge badge-blue"><?= (int) $l['testimonial_count'] ?></span>
             </td>
             <td>
-                <a href="/?action=testimonials&landing_id=<?= (int) $l['id'] ?>"
+                <a href="<?= APP_BASE ?>/?action=testimonials&landing_id=<?= (int) $l['id'] ?>"
                    class="btn btn-sm btn-primary">Manage</a>
             </td>
         </tr>

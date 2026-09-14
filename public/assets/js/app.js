@@ -88,7 +88,7 @@ function renderProductRows(products, query) {
             <td><span class="badge">${p.country_count|0}</span></td>
             <td><span class="badge badge-blue">${p.testimonial_count|0}</span></td>
             <td class="text-muted text-sm">${escHtml(sync)}</td>
-            <td><a href="/?action=landings&sku=${encodeURIComponent(sku)}" class="btn btn-sm btn-primary">View Landings</a></td>
+            <td><a href="${APP_BASE}/?action=landings&sku=${encodeURIComponent(sku)}" class="btn btn-sm btn-primary">View Landings</a></td>
         </tr>`;
     }).join('');
 }

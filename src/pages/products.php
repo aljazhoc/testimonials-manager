@@ -61,7 +61,7 @@ renderHeader('Products');
                 <td><span class="badge badge-blue"><?= (int) $p['testimonial_count'] ?></span></td>
                 <td class="text-muted text-sm"><?= $p['last_sync'] ? h(substr($p['last_sync'], 0, 16)) : 'Never' ?></td>
                 <td>
-                    <a href="/?action=landings&sku=<?= urlencode($p['parent_sku']) ?>"
+                    <a href="<?= APP_BASE ?>/?action=landings&sku=<?= urlencode($p['parent_sku']) ?>"
                        class="btn btn-sm btn-primary">View Landings</a>
                 </td>
             </tr>

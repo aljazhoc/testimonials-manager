@@ -18,7 +18,7 @@ class Auth
     public static function require(): void
     {
         if (!self::check()) {
-            header('Location: /?action=login');
+            header('Location: ' . APP_BASE . '/?action=login');
             exit;
         }
     }

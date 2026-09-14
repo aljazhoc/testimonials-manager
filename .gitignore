@@ -1,5 +1,6 @@
-# Environment — contains secrets, never commit
+# Environment & setup scripts — contain secrets, never commit
 .env
+setup_database.php
 
 # Uploaded images (keep directory, ignore files)
 public/uploads/*

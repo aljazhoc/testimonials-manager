@@ -68,14 +68,14 @@ function renderHeader(string $title = 'Testimonials Manager'): void
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{$safeTitle} — Testimonials Manager</title>
-        <link rel="stylesheet" href="/assets/css/style.css">
+        <link rel="stylesheet" href="<?= APP_BASE ?>/assets/css/style.css">
     </head>
     <body>
     <nav class="navbar">
-        <a href="/" class="navbar-brand">Testimonials Manager</a>
+        <a href="<?= APP_BASE ?>/" class="navbar-brand">Testimonials Manager</a>
         <div class="navbar-user">
             <span class="navbar-username">{$user}</span>
-            <a href="/?action=logout" class="btn btn-sm btn-outline-light">Logout</a>
+            <a href="<?= APP_BASE ?>/?action=logout" class="btn btn-sm btn-outline-light">Logout</a>
         </div>
     </nav>
     <div class="container">
@@ -87,7 +87,8 @@ function renderFooter(): void
     echo <<<HTML
     </div><!-- /container -->
     <div id="toast" class="toast hidden"></div>
-    <script src="/assets/js/app.js"></script>
+    <script>var APP_BASE = '<?= APP_BASE ?>';</script>
+    <script src="<?= APP_BASE ?>/assets/js/app.js"></script>
     </body>
     </html>
     HTML;
