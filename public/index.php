@@ -38,8 +38,10 @@ if ($action === 'login') {
 // All other pages require auth
 Auth::require();
 
-match ($action) {
-    'landings'     => require_once ROOT_DIR . '/src/pages/landings.php',
-    'testimonials' => require_once ROOT_DIR . '/src/pages/testimonials.php',
-    default        => require_once ROOT_DIR . '/src/pages/products.php',
-};
+if ($action === 'landings') {
+    require_once ROOT_DIR . '/src/pages/landings.php';
+} elseif ($action === 'testimonials') {
+    require_once ROOT_DIR . '/src/pages/testimonials.php';
+} else {
+    require_once ROOT_DIR . '/src/pages/products.php';
+}

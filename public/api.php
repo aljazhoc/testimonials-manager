@@ -14,20 +14,18 @@ if (!Auth::check()) {
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
 try {
-    match ($action) {
-        'sync'              => handleSync(),
-        'save_testimonial'  => handleSaveTestimonial(),
-        'delete_testimonial'=> handleDeleteTestimonial(),
-        'reorder'           => handleReorder(),
-        'toggle_active'     => handleToggleActive(),
-        'delete_image'      => handleDeleteImage(),
-        'search_products'   => handleSearchProducts(),
-        'bulk_action'       => handleBulkAction(),
-        'ai_translate'      => handleAiTranslate(),
-        'ai_generate_name'  => handleAiGenerateName(),
-        'change_log'        => handleChangeLog(),
-        default             => jsonResponse(['error' => 'Unknown action'], 400),
-    };
+    if      ($action === 'sync')               handleSync();
+    elseif  ($action === 'save_testimonial')   handleSaveTestimonial();
+    elseif  ($action === 'delete_testimonial') handleDeleteTestimonial();
+    elseif  ($action === 'reorder')            handleReorder();
+    elseif  ($action === 'toggle_active')      handleToggleActive();
+    elseif  ($action === 'delete_image')       handleDeleteImage();
+    elseif  ($action === 'search_products')    handleSearchProducts();
+    elseif  ($action === 'bulk_action')        handleBulkAction();
+    elseif  ($action === 'ai_translate')       handleAiTranslate();
+    elseif  ($action === 'ai_generate_name')   handleAiGenerateName();
+    elseif  ($action === 'change_log')         handleChangeLog();
+    else    jsonResponse(['error' => 'Unknown action'], 400);
 } catch (Throwable $e) {
     jsonResponse(['error' => $e->getMessage()], 500);
 }
@@ -52,8 +50,8 @@ function fuzzyScore(string $str, string $query): int
     $str   = strtolower($str);
     $query = strtolower($query);
 
-    if ($str === $query)           return 100;
-    if (str_contains($str, $query)) return 80;
+    if ($str === $query)                    return 100;
+    if (strpos($str, $query) !== false)     return 80;
 
     // Levenshtein: allow 1 error per 4 chars (min 1)
     $maxDist = max(1, (int) (strlen($query) / 4));
@@ -175,11 +173,9 @@ function handleSync(): void
         ]);
 
         // rowCount: 1 = inserted, 2 = updated, 0 = no change
-        match ($upsert->rowCount()) {
-            1       => $inserted++,
-            2       => $updated++,
-            default => null,
-        };
+        $rc = $upsert->rowCount();
+        if ($rc === 1) $inserted++;
+        elseif ($rc === 2) $updated++;
     }
 
     jsonResponse([

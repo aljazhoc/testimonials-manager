@@ -5,7 +5,7 @@ function h(string $str): string
     return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
 
-function jsonResponse(array $data, int $status = 200): never
+function jsonResponse(array $data, int $status = 200): void
 {
     http_response_code($status);
     header('Content-Type: application/json');
@@ -25,12 +25,10 @@ function createThumbnail(string $src, string $dest, int $maxW = 300, int $maxH =
 
     [$origW, $origH, $type] = $info;
 
-    $image = match ($type) {
-        IMAGETYPE_JPEG => imagecreatefromjpeg($src),
-        IMAGETYPE_PNG  => imagecreatefrompng($src),
-        IMAGETYPE_WEBP => imagecreatefromwebp($src),
-        default        => false,
-    };
+    if ($type === IMAGETYPE_JPEG)      $image = imagecreatefromjpeg($src);
+    elseif ($type === IMAGETYPE_PNG)   $image = imagecreatefrompng($src);
+    elseif ($type === IMAGETYPE_WEBP)  $image = imagecreatefromwebp($src);
+    else                               $image = false;
     if (!$image) return false;
 
     $ratio = min($maxW / $origW, $maxH / $origH, 1);
@@ -48,12 +46,10 @@ function createThumbnail(string $src, string $dest, int $maxW = 300, int $maxH =
 
     imagecopyresampled($thumb, $image, 0, 0, 0, 0, $newW, $newH, $origW, $origH);
 
-    $ok = match ($type) {
-        IMAGETYPE_JPEG => imagejpeg($thumb, $dest, 85),
-        IMAGETYPE_PNG  => imagepng($thumb, $dest),
-        IMAGETYPE_WEBP => imagewebp($thumb, $dest, 85),
-        default        => false,
-    };
+    if ($type === IMAGETYPE_JPEG)      $ok = imagejpeg($thumb, $dest, 85);
+    elseif ($type === IMAGETYPE_PNG)   $ok = imagepng($thumb, $dest);
+    elseif ($type === IMAGETYPE_WEBP)  $ok = imagewebp($thumb, $dest, 85);
+    else                               $ok = false;
 
     imagedestroy($image);
     imagedestroy($thumb);
