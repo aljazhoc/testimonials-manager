@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 // Docker: src/ is sibling of public/ → ROOT_DIR = parent
 // FTP:    src/ is child  of public/ → ROOT_DIR = __DIR__
