@@ -1,48 +1,53 @@
 <?php
-$root = __DIR__;
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-echo "<h2>PHP " . PHP_VERSION . "</h2>";
-echo "<p>PHP >= 7.4: " . (version_compare(PHP_VERSION, '7.4', '>=') ? '<b style="color:green">OK</b>' : '<b style="color:red">NAPAKA</b>') . "</p>";
-echo "<p>pdo_mysql: "  . (extension_loaded('pdo_mysql') ? '<b style="color:green">OK</b>' : '<b style="color:red">MANJKA</b>') . "</p>";
-echo "<p>gd: "         . (extension_loaded('gd')        ? '<b style="color:green">OK</b>' : '<b style="color:red">MANJKA</b>') . "</p>";
-echo "<p>ROOT_DIR: <code>$root</code></p>";
-echo "<p>src/ obstaja: " . (is_dir($root . '/src') ? '<b style="color:green">DA</b>' : '<b style="color:red">NE</b>') . "</p>";
+echo "<h3>Step 1: Basic info</h3>";
+echo "PHP: " . PHP_VERSION . "<br>";
+echo "ROOT: " . __DIR__ . "<br>";
 
-// .env check
-$envFile = $root . '/.env';
-echo "<p>.env obstaja: " . (file_exists($envFile) ? '<b style="color:green">DA</b>' : '<b style="color:red">NE — ustvari .env datoteko!</b>') . "</p>";
+echo "<h3>Step 2: Load config</h3>";
+define('ROOT_DIR', __DIR__);
+try {
+    require_once __DIR__ . '/src/config.php';
+    echo "config.php: OK<br>";
+    echo "APP_BASE: '" . APP_BASE . "'<br>";
+    echo "DB_NAME: " . DB_NAME . "<br>";
+    echo "UPLOAD_URL: " . UPLOAD_URL . "<br>";
+} catch (Throwable $e) {
+    echo "config.php ERROR: " . $e->getMessage() . "<br>";
+    exit;
+}
 
-if (file_exists($envFile)) {
-    $env = [];
-    foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
-        if (strpos(trim($line), '#') === 0 || strpos($line, '=') === false) continue;
-        [$k, $v] = explode('=', $line, 2);
-        $env[trim($k)] = trim($v);
-    }
+echo "<h3>Step 3: Load Database</h3>";
+try {
+    require_once __DIR__ . '/src/Database.php';
+    $db = Database::get();
+    echo "Database: OK<br>";
+} catch (Throwable $e) {
+    echo "Database ERROR: " . $e->getMessage() . "<br>";
+    exit;
+}
 
-    $host = $env['DB_HOST'] ?? 'localhost';
-    $name = $env['DB_NAME'] ?? '';
-    $user = $env['DB_USER'] ?? '';
-    $pass = $env['DB_PASSWORD'] ?? '';
+echo "<h3>Step 4: Load Auth + helpers</h3>";
+try {
+    require_once __DIR__ . '/src/Auth.php';
+    require_once __DIR__ . '/src/helpers.php';
+    echo "Auth + helpers: OK<br>";
+} catch (Throwable $e) {
+    echo "Auth/helpers ERROR: " . $e->getMessage() . "<br>";
+    exit;
+}
 
-    echo "<p>DB_HOST: <code>$host</code></p>";
-    echo "<p>DB_NAME: <code>$name</code></p>";
-    echo "<p>DB_USER: <code>$user</code></p>";
-    echo "<p>DB_PASSWORD: <code>" . str_repeat('*', strlen($pass)) . "</code></p>";
-
-    // Test DB connection
-    try {
-        $pdo = new PDO("mysql:host=$host;dbname=$name;charset=utf8mb4", $user, $pass, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        ]);
-        echo "<p>DB konekcija: <b style='color:green'>OK</b></p>";
-
-        $tables = $pdo->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
-        echo "<p>Tabele: <code>" . implode(', ', $tables) . "</code></p>";
-
-        $landingCount = $pdo->query("SELECT COUNT(*) FROM landings")->fetchColumn();
-        echo "<p>Landings v bazi: <b>$landingCount</b></p>";
-    } catch (Exception $e) {
-        echo "<p>DB konekcija: <b style='color:red'>NAPAKA — " . htmlspecialchars($e->getMessage()) . "</b></p>";
-    }
+echo "<h3>Step 5: renderHeader test</h3>";
+try {
+    session_start();
+    $_SESSION['user_id'] = 1;
+    $_SESSION['username'] = 'test';
+    renderHeader('Test');
+    echo "<p>renderHeader: OK</p>";
+    renderFooter();
+} catch (Throwable $e) {
+    echo "renderHeader/Footer ERROR: " . $e->getMessage() . " in " . $e->getFile() . ":" . $e->getLine() . "<br>";
 }
