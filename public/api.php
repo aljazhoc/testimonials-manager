@@ -464,7 +464,7 @@ function handleChangeLog(): void
     $stmt = $db->prepare("
         SELECT cl.id, cl.action, cl.entity_id, cl.details, cl.created_at, u.username
         FROM change_log cl
-        LEFT JOIN users u ON u.id = cl.user_id
+        LEFT JOIN tm_users u ON u.id = cl.user_id
         WHERE cl.entity = 'testimonial'
           AND cl.landing_id = ?
         ORDER BY cl.created_at DESC

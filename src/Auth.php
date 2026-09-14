@@ -26,7 +26,7 @@ class Auth
     public static function login(string $username, string $password): bool
     {
         $db   = Database::get();
-        $stmt = $db->prepare('SELECT id, username, password_hash FROM users WHERE username = ?');
+        $stmt = $db->prepare('SELECT id, username, password_hash FROM tm_users WHERE username = ?');
         $stmt->execute([$username]);
         $user = $stmt->fetch();
 

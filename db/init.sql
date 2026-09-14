@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `testimonial_images` (
     FOREIGN KEY (`testimonial_id`) REFERENCES `testimonials`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE IF NOT EXISTS `tm_users` (
     `id`            INT          NOT NULL AUTO_INCREMENT,
     `username`      VARCHAR(100) NOT NULL,
     `password_hash` VARCHAR(255) NOT NULL,
@@ -69,5 +69,5 @@ CREATE TABLE IF NOT EXISTS `change_log` (
 
 -- Default admin: username=admin, password=password
 -- Hash generated with: password_hash('password', PASSWORD_BCRYPT)
-INSERT IGNORE INTO `users` (`username`, `password_hash`) VALUES
+INSERT IGNORE INTO `tm_users` (`username`, `password_hash`) VALUES
 ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
