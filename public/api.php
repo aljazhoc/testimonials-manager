@@ -1,6 +1,6 @@
 <?php
 
-define('ROOT_DIR', dirname(__DIR__));
+define('ROOT_DIR', is_dir(dirname(__DIR__) . '/src') ? dirname(__DIR__) : __DIR__);
 require_once ROOT_DIR . '/src/config.php';
 require_once ROOT_DIR . '/src/Database.php';
 require_once ROOT_DIR . '/src/Auth.php';

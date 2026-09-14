@@ -1,6 +1,8 @@
 <?php
 
-define('ROOT_DIR', dirname(__DIR__));
+// Docker: src/ is sibling of public/ → ROOT_DIR = parent
+// FTP:    src/ is child  of public/ → ROOT_DIR = __DIR__
+define('ROOT_DIR', is_dir(dirname(__DIR__) . '/src') ? dirname(__DIR__) : __DIR__);
 
 require_once ROOT_DIR . '/src/config.php';
 require_once ROOT_DIR . '/src/Database.php';
