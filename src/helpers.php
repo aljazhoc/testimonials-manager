@@ -85,6 +85,7 @@ function renderHeader(string $title = 'Testimonials Manager'): void
 
 function renderFooter(): void
 {
+    $base = APP_BASE;
     echo <<<HTML
     </div><!-- /container -->
     <div id="toast" class="toast hidden"></div>
