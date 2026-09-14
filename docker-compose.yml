@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  app:
+    build: ./docker/php
+    container_name: testimonials_app
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_ROOT: /var/www/app
+
+  db:
+    image: mysql:8.0
+    container_name: testimonials_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootsecret123
+      MYSQL_DATABASE: testimonials
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: secret123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "app_user", "-psecret123"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: testimonials_pma
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: app_user
+      PMA_PASSWORD: secret123
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
