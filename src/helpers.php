@@ -59,8 +59,9 @@ function createThumbnail(string $src, string $dest, int $maxW = 300, int $maxH =
 
 function renderHeader(string $title = 'Testimonials Manager'): void
 {
-    $user = h(Auth::username());
+    $user      = h(Auth::username());
     $safeTitle = h($title);
+    $base      = APP_BASE;
     echo <<<HTML
     <!DOCTYPE html>
     <html lang="en">
@@ -68,14 +69,14 @@ function renderHeader(string $title = 'Testimonials Manager'): void
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{$safeTitle} — Testimonials Manager</title>
-        <link rel="stylesheet" href="<?= APP_BASE ?>/assets/css/style.css">
+        <link rel="stylesheet" href="{$base}/assets/css/style.css">
     </head>
     <body>
     <nav class="navbar">
-        <a href="<?= APP_BASE ?>/" class="navbar-brand">Testimonials Manager</a>
+        <a href="{$base}/" class="navbar-brand">Testimonials Manager</a>
         <div class="navbar-user">
             <span class="navbar-username">{$user}</span>
-            <a href="<?= APP_BASE ?>/?action=logout" class="btn btn-sm btn-outline-light">Logout</a>
+            <a href="{$base}/?action=logout" class="btn btn-sm btn-outline-light">Logout</a>
         </div>
     </nav>
     <div class="container">
@@ -87,8 +88,8 @@ function renderFooter(): void
     echo <<<HTML
     </div><!-- /container -->
     <div id="toast" class="toast hidden"></div>
-    <script>var APP_BASE = '<?= APP_BASE ?>';</script>
-    <script src="<?= APP_BASE ?>/assets/js/app.js"></script>
+    <script>var APP_BASE = '{$base}';</script>
+    <script src="{$base}/assets/js/app.js"></script>
     </body>
     </html>
     HTML;
